@@ -1,4 +1,4 @@
-import { searchBooks, formatBook } from "./utils/search.js";
+import { searchBooks, formatBook } from "./search.js";
 
 // Placeholder script to demonstrate usage inside Vite app
 export async function runSample() {

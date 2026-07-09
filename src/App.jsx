@@ -1,11 +1,12 @@
-import './App.css'
+import "./App.css";
+import Title from "./components/Title/title.jsx";
 
 function App() {
   return (
     <>
-      <h1> working webpage</h1>
+      <Title />
     </>
-  )
+  );
 }
 
-export default App
+export default App;
