@@ -1,8 +1,8 @@
-import styles from './search_bar.module.scss';
+import styles from './SearchBar.module.scss';
 
 function SearchBar() {
     return (
-        <div className={styles.searchBar}>
+        <div className={styles.SearchBar}>
             <input type="text" placeholder="Type your keyword..." />
             <button>Search</button>
         </div>
