@@ -12,7 +12,7 @@ function SearchBar({ setSearchResults }) {
   const handleSearch = async () => {
     // fetch search results from the API
     const results = await searchBooks(query);
-    const formattedResults = results.map(formatBook);
+    const formattedResults = formatBook(results);
     setSearchResults(formattedResults);
   };
 

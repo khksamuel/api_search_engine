@@ -1,5 +1,3 @@
-import fs from "fs";
-
 import {
   getBooksApiKey,
   searchBooks,
@@ -42,76 +40,74 @@ function createBook(overrides = {}) {
   };
 }
 
-let originalReadFileSync;
 let originalFetch;
-let originalExistsSync;
+let originalBooksApiKey;
+let originalViteBooksApiKey;
 
 describe("Google Books helpers", () => {
   beforeEach(() => {
-    originalReadFileSync = fs.readFileSync;
     originalFetch = global.fetch;
-    originalExistsSync = fs.existsSync;
-    fs.existsSync = jest.fn(() => true);
+    originalBooksApiKey = process.env.BOOKS_API_KEY;
+    originalViteBooksApiKey = process.env.VITE_BOOKS_API_KEY;
+    delete process.env.BOOKS_API_KEY;
+    delete process.env.VITE_BOOKS_API_KEY;
   });
 
   afterEach(() => {
-    fs.readFileSync = originalReadFileSync;
     global.fetch = originalFetch;
-    fs.existsSync = originalExistsSync;
+    if (originalBooksApiKey === undefined) {
+      delete process.env.BOOKS_API_KEY;
+    } else {
+      process.env.BOOKS_API_KEY = originalBooksApiKey;
+    }
+
+    if (originalViteBooksApiKey === undefined) {
+      delete process.env.VITE_BOOKS_API_KEY;
+    } else {
+      process.env.VITE_BOOKS_API_KEY = originalViteBooksApiKey;
+    }
   });
 
-  test("getBooksApiKey reads BOOKS_API_KEY from .env content", () => {
-    fs.readFileSync = jest.fn(() => "BOOKS_API_KEY=test-key-123");
+  test("getBooksApiKey reads BOOKS_API_KEY from process.env", () => {
+    process.env.BOOKS_API_KEY = "test-key-123";
 
     expect(getBooksApiKey()).toBe("test-key-123");
   });
 
-  test("getBooksApiKey throws if .env file is empty", () => {
-    fs.readFileSync = jest.fn(() => "");
+  test("getBooksApiKey falls back to VITE_BOOKS_API_KEY", () => {
+    process.env.VITE_BOOKS_API_KEY = "vite-key-456";
 
-    expect(() => getBooksApiKey()).toThrow(
-      /.env file is empty, please follow template in .env.example/,
-    );
-  });
-
-  test("getBooksApiKey throws if .env file is missing", () => {
-    fs.existsSync = jest.fn(() => false);
-
-    expect(() => getBooksApiKey()).toThrow(
-      /.env file not found, please create one with your BOOKS_API_KEY following the instructions in the README/,
-    );
+    expect(getBooksApiKey()).toBe("vite-key-456");
   });
 
   test("getBooksApiKey strips wrapping quotes", () => {
-    fs.readFileSync = jest.fn(() => 'BOOKS_API_KEY="quoted-key"');
+    process.env.BOOKS_API_KEY = '"quoted-key"';
 
     expect(getBooksApiKey()).toBe("quoted-key");
   });
 
-  test("getBooksApiKey throws if BOOKS_API_KEY is missing", () => {
-    fs.readFileSync = jest.fn(() => "SOME_OTHER_KEY=value");
+  test("getBooksApiKey throws if API key is missing", () => {
 
     expect(() => getBooksApiKey()).toThrow(
-      /BOOKS_API_KEY was not found in \.env/,
+      /Google Books API key is missing/,
     );
   });
 
   test("searchBooks throws if BOOKS_API_KEY is missing", () => {
-    fs.readFileSync = jest.fn(() => "SOME_OTHER_KEY=value");
     expect(() => searchBooks("JavaScript")).toThrow(
-      /BOOKS_API_KEY was not found in \.env/,
+      /Google Books API key is missing/,
     );
   });
 
   test("searchBooks throws if query is missing", () => {
-    fs.readFileSync = jest.fn(() => "BOOKS_API_KEY=test-key");
+    process.env.BOOKS_API_KEY = "test-key";
     expect(() => searchBooks("")).toThrow(
       /Query is required for searching books/,
     );
   });
 
   test("searchBooks returns API items array", async () => {
-    fs.readFileSync = jest.fn(() => "BOOKS_API_KEY=test-key");
+    process.env.BOOKS_API_KEY = "test-key";
     const items = [createBook(), createBook({ title: "Eloquent JavaScript" })];
 
     global.fetch = jest.fn(async (url) => {
@@ -129,7 +125,7 @@ describe("Google Books helpers", () => {
   });
 
   test("searchBooks encodes query text", async () => {
-    fs.readFileSync = jest.fn(() => "BOOKS_API_KEY=test-key");
+    process.env.BOOKS_API_KEY = "test-key";
 
     global.fetch = jest.fn(async (url) => {
       expect(url).toMatch(/q=clean%20code/);
@@ -142,7 +138,7 @@ describe("Google Books helpers", () => {
   });
 
   test("searchBooks returns empty array when API has no items", async () => {
-    fs.readFileSync = jest.fn(() => "BOOKS_API_KEY=test-key");
+    process.env.BOOKS_API_KEY = "test-key";
 
     global.fetch = jest.fn(async () => ({
       json: async () => ({}),
@@ -153,7 +149,7 @@ describe("Google Books helpers", () => {
   });
 
   test("searchBooks throws Rate Limit error when API returns 429 with text body", async () => {
-    fs.readFileSync = jest.fn(() => "BOOKS_API_KEY=test-key");
+    process.env.BOOKS_API_KEY = "test-key";
 
     global.fetch = jest.fn(async () => ({
       ok: false,
@@ -170,7 +166,7 @@ describe("Google Books helpers", () => {
   });
 
   test("searchBooks throws Access Denied error when API returns 403 with JSON body", async () => {
-    fs.readFileSync = jest.fn(() => "BOOKS_API_KEY=test-key");
+    process.env.BOOKS_API_KEY = "test-key";
 
     global.fetch = jest.fn(async () => ({
       ok: false,
@@ -185,7 +181,7 @@ describe("Google Books helpers", () => {
   });
 
   test("searchBooks throws generic API error when API returns 500 with JSON body", async () => {
-    fs.readFileSync = jest.fn(() => "BOOKS_API_KEY=test-key");
+    process.env.BOOKS_API_KEY = "test-key";
 
     global.fetch = jest.fn(async () => ({
       ok: false,
@@ -200,7 +196,7 @@ describe("Google Books helpers", () => {
   });
 
   test("searchBooks wraps network errors with a clear message", async () => {
-    fs.readFileSync = jest.fn(() => "BOOKS_API_KEY=test-key");
+    process.env.BOOKS_API_KEY = "test-key";
 
     global.fetch = jest.fn(() => Promise.reject(new Error("network down")));
 
@@ -246,7 +242,7 @@ describe("Google Books helpers", () => {
   });
 
   test("column name flow from brief works with async search + formatting", async () => {
-    fs.readFileSync = jest.fn(() => "BOOKS_API_KEY=test-key");
+    process.env.BOOKS_API_KEY = "test-key";
     global.fetch = jest.fn(async () => ({
       json: async () => ({ items: [createBook()] }),
     }));

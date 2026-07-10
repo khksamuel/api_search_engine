@@ -71,7 +71,7 @@ Change the API key to your key from Google Cloud Console:
 6. Open your local `.env` file and set:
 
 ```
-BOOKS_API_KEY=your_api_key_here
+VITE_BOOKS_API_KEY=your_api_key_here
 ```
 
 7. Save the file.
@@ -83,7 +83,7 @@ Security note:
 Quick verification (optional):
 
 ```
-node -e "console.log(process.env.BOOKS_API_KEY)"
+node -e "console.log(process.env.BOOKS_API_KEY || process.env.VITE_BOOKS_API_KEY)"
 ```
 
 Test the repo with:

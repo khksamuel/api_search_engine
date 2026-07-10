@@ -1,8 +1,17 @@
-import fs from "fs";
-import path from "path";
-
 const GOOGLE_BOOKS_ERROR_PREFIX =
   /^(Rate limit exceeded|Access denied|Google Books API error)/;
+
+function sanitiseApiKey(value) {
+  return String(value).trim().replace(/^['\"]|['\"]$/g, "");
+}
+
+function readProcessApiKey() {
+  if (typeof process === "undefined" || !process.env) {
+    return "";
+  }
+
+  return process.env.BOOKS_API_KEY || process.env.VITE_BOOKS_API_KEY || "";
+}
 
 function formatGoogleBooksApiError(status, message) {
   if (status === 429) {
@@ -44,41 +53,14 @@ async function fetchGoogleBooksJson(url, errorContext) {
 }
 
 export function getBooksApiKey() {
-  // Prefer an explicit environment variable when available (useful for tests and CI)
-  if (
-    typeof process !== "undefined" &&
-    process.env &&
-    process.env.BOOKS_API_KEY
-  ) {
-    return String(process.env.BOOKS_API_KEY)
-      .trim()
-      .replace(/^['\\"]|['\\"]$/g, "");
-  }
-
-  const cwdFallback =
-    typeof process !== "undefined" && typeof process.cwd === "function"
-      ? process.cwd()
-      : path.resolve(".");
-  const envPath = path.resolve(cwdFallback, ".env");
-  if (!fs.existsSync(envPath)) {
+  const apiKey = readProcessApiKey();
+  if (!apiKey) {
     throw new Error(
-      ".env file not found, please create one with your BOOKS_API_KEY following the instructions in the README",
+      "Google Books API key is missing. Set VITE_BOOKS_API_KEY in .env for the app or BOOKS_API_KEY for Node scripts/tests.",
     );
   }
 
-  const envFile = fs.readFileSync(envPath, "utf8");
-  if (!envFile) {
-    throw new Error(
-      ".env file is empty, please follow template in .env.example",
-    );
-  }
-
-  const match = envFile.match(/^BOOKS_API_KEY\s*=\s*(.*)$/m);
-  if (!match) {
-    throw new Error("BOOKS_API_KEY was not found in .env");
-  }
-
-  return match[1].trim().replace(/^[\\"]|[\\"]$/g, "");
+  return sanitiseApiKey(apiKey);
 }
 
 export function searchBooks(query) {
