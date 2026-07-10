@@ -4,7 +4,7 @@ function Title() {
   return (
     <>
       <div className={styles.titleContainer}>
-        <h1>API Search Engine</h1>
+        <h1>Google Books API Search</h1>
       </div>
     </>
   );

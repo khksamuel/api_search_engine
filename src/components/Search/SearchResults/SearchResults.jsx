@@ -1,8 +1,9 @@
 import Card from "../Card/Card.jsx";
+import styles from "./SearchResults.module.scss";
 
 function SearchResults({ searchResults }) {
   return (
-    <div>
+    <div className={styles.searchResults}>
       {searchResults.map((result, index) => (
         <Card
           key={index}

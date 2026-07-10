@@ -69,7 +69,8 @@ export function searchBooks(query) {
   if (!query) throw new Error("Query is required for searching books");
   const apiKey = getBooksApiKey();
   if (!apiKey) throw new Error("BOOKS_API_KEY is missing or empty in .env");
-  const url = `https://www.googleapis.com/books/v1/volumes?q=${encodeURIComponent(query)}&key=${apiKey}`;
+  // hardcoded maxResults=8 to limit the number of results
+  const url = `https://www.googleapis.com/books/v1/volumes?q=${encodeURIComponent(query)}&key=${apiKey}&maxResults=8`;
   return fetchGoogleBooksJson(url, "books").then((data) => data.items || []);
 }
 

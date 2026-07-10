@@ -20,6 +20,9 @@ function SearchBar({ setSearchResults }) {
       const formattedResults = formatBook(results);
       setErrorMessage("");
       setSearchResults(formattedResults);
+      if (formattedResults.length === 0) {
+        setErrorMessage("No results found. Please try a different query.");
+      }
     } catch (error) {
       setSearchResults([]);
       setErrorMessage(error.message || "Search failed. Please try again.");

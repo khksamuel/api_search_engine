@@ -26,7 +26,8 @@ function loadApiKeyIntoProcessEnv() {
 export async function runSample() {
   loadApiKeyIntoProcessEnv();
   const books = await searchBooks("JavaScript");
-  return formatBook(books);
+  return books;
+  // return formatBook(books);
 }
 
 console.log("Sample search results:", await runSample());
