@@ -1,5 +1,6 @@
 import styles from "./Card.module.scss";
 import DetailsDialog from "../DetailsDialog/DetailsDialog.jsx";
+import DefaultBookCover from "../../../assets/BookCover.webp";
 import { useRef } from "react";
 
 function Card({
@@ -22,7 +23,7 @@ function Card({
     }
     return (
       <img
-        src="https://thumbs.dreamstime.com/b/old-book-cover-24489981.jpg"
+        src={DefaultBookCover}
         alt="Default book cover"
         className={styles.cardImage}
       />
@@ -32,7 +33,7 @@ function Card({
     return (
       <DetailsDialog
         title={title}
-        imageUrl={imageUrl}
+        imageUrl={imageUrl || DefaultBookCover}
         authors={authors}
         publisher={publisher}
         description={description}

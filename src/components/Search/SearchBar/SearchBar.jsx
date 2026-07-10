@@ -86,8 +86,9 @@ function SearchBar({ setSearchResults }) {
           placeholder="Type here to search..."
           value={query}
           onChange={handleInputChange}
+          className={styles.searchInput}
         />
-        <button type="button" onClick={() => handleSearch(1)}>
+        <button type="button" onClick={() => handleSearch(1)} className={styles.searchButton}>
           Search
         </button>
       </div>

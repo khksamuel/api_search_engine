@@ -2,8 +2,12 @@ import Card from "../Card/Card.jsx";
 import styles from "./SearchResults.module.scss";
 
 function SearchResults({ searchResults }) {
+  const hasResults = searchResults.length > 0;
+
   return (
-    <div className={styles.searchResults}>
+    <div
+      className={`${styles.searchResults} ${hasResults ? styles.hasResults : ""}`}
+    >
       {searchResults.map((result, index) => (
         <Card
           key={index}

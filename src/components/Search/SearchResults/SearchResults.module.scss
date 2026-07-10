@@ -1,7 +1,25 @@
 .searchResults {
+  margin-top: 1rem;
+  padding-top: 10px;
   display: flex;
   flex-wrap: wrap;
   justify-content: center;
-  gap: 20px;
+  column-gap: 40px;
+  row-gap: 20px;
   padding: 20px;
+}
+
+.hasResults {
+  min-height: 60vh;
+  background-image: url("../../../assets/OpenedBooks.png");
+  background-repeat: no-repeat;
+  background-position: center top;
+  background-size: min(1200px, 98%) auto;
+}
+
+@media (max-width: 768px) {
+  .hasResults {
+    background-size: 170% auto;
+    background-position: center 0.5rem;
+  }
 }

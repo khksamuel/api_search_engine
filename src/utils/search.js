@@ -66,7 +66,7 @@ export function getBooksApiKey() {
 }
 
 export function searchBooks(query, page = 1, maxResults = 8) {
-  if (!query) throw new Error("Query is required for searching books");
+  if (!query) throw new Error("Query is required for searching books. Try using a different query.");
   if (!Number.isInteger(page) || page < 1) {
     throw new Error("Page must be a positive integer");
   }
