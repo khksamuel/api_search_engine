@@ -1,6 +1,48 @@
 import fs from "fs";
 import path from "path";
 
+const GOOGLE_BOOKS_ERROR_PREFIX =
+  /^(Rate limit exceeded|Access denied|Google Books API error)/;
+
+function formatGoogleBooksApiError(status, message) {
+  if (status === 429) {
+    return new Error(`Rate limit exceeded (HTTP 429): ${message}`);
+  }
+  if (status === 403) {
+    return new Error(`Access denied (HTTP 403): ${message}`);
+  }
+  return new Error(`Google Books API error (HTTP ${status}): ${message}`);
+}
+
+async function readGoogleBooksApiErrorMessage(response) {
+  try {
+    const body = await response.json();
+    if (!body) return "Unknown API error";
+    return body.error?.message || body.error || JSON.stringify(body);
+  } catch {
+    const text = await response.text().catch(() => "");
+    return text || response.statusText || `HTTP ${response.status}`;
+  }
+}
+
+async function fetchGoogleBooksJson(url, errorContext) {
+  try {
+    const response = await fetch(url);
+
+    if (response.ok === false) {
+      const message = await readGoogleBooksApiErrorMessage(response);
+      throw formatGoogleBooksApiError(response.status, message);
+    }
+
+    return await response.json().catch(() => ({}));
+  } catch (error) {
+    if (GOOGLE_BOOKS_ERROR_PREFIX.test(error.message)) {
+      throw error;
+    }
+    throw new Error(`Error fetching ${errorContext}: ${error.message}`);
+  }
+}
+
 export function getBooksApiKey() {
   // Prefer an explicit environment variable when available (useful for tests and CI)
   if (
@@ -44,54 +86,15 @@ export function searchBooks(query) {
   const apiKey = getBooksApiKey();
   if (!apiKey) throw new Error("BOOKS_API_KEY is missing or empty in .env");
   const url = `https://www.googleapis.com/books/v1/volumes?q=${encodeURIComponent(query)}&key=${apiKey}`;
-  return fetch(url)
-    .then(async (response) => {
-      if (response.ok === false) {
-        let body;
-        try {
-          body = await response.json();
-        } catch {
-          const text = await response.text().catch(() => "");
-          const msg = text || response.statusText || `HTTP ${response.status}`;
-          if (response.status === 429)
-            throw new Error(`Rate limit exceeded (HTTP 429): ${msg}`);
-          if (response.status === 403)
-            throw new Error(`Access denied (HTTP 403): ${msg}`);
-          throw new Error(
-            `Google Books API error (HTTP ${response.status}): ${msg}`,
-          );
-        }
-
-        const apiMessage =
-          (body && (body.error?.message || body.error)) || JSON.stringify(body);
-        if (response.status === 429)
-          throw new Error(`Rate limit exceeded (HTTP 429): ${apiMessage}`);
-        if (response.status === 403)
-          throw new Error(`Access denied (HTTP 403): ${apiMessage}`);
-        throw new Error(
-          `Google Books API error (HTTP ${response.status}): ${apiMessage}`,
-        );
-      }
-
-      const data = await response.json().catch(() => ({}));
-      return data.items || [];
-    })
-    .catch((error) => {
-      if (
-        /^(Rate limit exceeded|Access denied|Google Books API error)/.test(
-          error.message,
-        )
-      ) {
-        throw error;
-      }
-      throw new Error(`Error fetching books: ${error.message}`);
-    });
+  return fetchGoogleBooksJson(url, "books").then((data) => data.items || []);
 }
 
 export function formatBook(bookdata) {
   if (!bookdata) throw new Error("Error fetching book data");
   return bookdata.map((book) => ({
     title: book.volumeInfo.title,
+    id: book.id,
+    imageUrl: book.volumeInfo.imageLinks?.thumbnail || null,
     authors: book.volumeInfo.authors,
     publisher: book.volumeInfo.publisher,
     publishedDate: book.volumeInfo.publishedDate,

@@ -9,6 +9,8 @@ import {
 
 const EXPECTED_COLUMNS = [
   "title",
+  "id",
+  "imageUrl",
   "authors",
   "publisher",
   "publishedDate",

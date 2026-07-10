@@ -5,3 +5,5 @@ export async function runSample() {
   const books = await searchBooks("JavaScript");
   return formatBook(books);
 }
+
+console.log("Sample search results:", await runSample());
