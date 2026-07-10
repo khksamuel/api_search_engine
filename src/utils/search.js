@@ -2,7 +2,9 @@ const GOOGLE_BOOKS_ERROR_PREFIX =
   /^(Rate limit exceeded|Access denied|Google Books API error)/;
 
 function sanitiseApiKey(value) {
-  return String(value).trim().replace(/^['\"]|['\"]$/g, "");
+  return String(value)
+    .trim()
+    .replace(/^['\"]|['\"]$/g, "");
 }
 
 function readProcessApiKey() {

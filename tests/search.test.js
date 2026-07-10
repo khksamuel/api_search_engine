@@ -87,10 +87,7 @@ describe("Google Books helpers", () => {
   });
 
   test("getBooksApiKey throws if API key is missing", () => {
-
-    expect(() => getBooksApiKey()).toThrow(
-      /Google Books API key is missing/,
-    );
+    expect(() => getBooksApiKey()).toThrow(/Google Books API key is missing/);
   });
 
   test("searchBooks throws if BOOKS_API_KEY is missing", () => {
