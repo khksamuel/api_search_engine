@@ -59,15 +59,15 @@ function Card({
           <p className={styles.cardAuthors}>
             {authors ? authors.join(", ") : "Unknown Author"}
           </p>
-            <button
-                className={styles.cardButton}
-                onClick={() => dialogRef.current.showModal()}
-            >
-                View Details
-            </button>
-            <dialog ref={dialogRef} className={styles.cardDialog}>
-                {renderDetailsDialog()}
-            </dialog>
+          <button
+            className={styles.cardButton}
+            onClick={() => dialogRef.current.showModal()}
+          >
+            Details
+          </button>
+          <dialog ref={dialogRef} className={styles.cardDialog}>
+            {renderDetailsDialog()}
+          </dialog>
         </div>
       </div>
     </div>

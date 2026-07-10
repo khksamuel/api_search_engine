@@ -77,7 +77,7 @@ function DetailsDialog({
               target="_blank"
               rel="noreferrer"
             >
-              Open preview
+              Open in Google Books
             </a>
           ) : null}
         </div>
