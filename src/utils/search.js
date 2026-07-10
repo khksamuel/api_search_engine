@@ -97,6 +97,7 @@ export function formatBook(bookdata) {
   return bookdata.map((book) => ({
     title: book.volumeInfo.title,
     id: book.id,
+    // not all books have small, medium, or large image links, so we use thumbnail if available, otherwise null
     imageUrl: book.volumeInfo.imageLinks?.thumbnail || null,
     authors: book.volumeInfo.authors,
     publisher: book.volumeInfo.publisher,

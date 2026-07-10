@@ -9,6 +9,7 @@
   column-gap: 40px;
   row-gap: 20px;
   padding: 20px;
+  border-radius: 1rem;
 }
 
 .hasResults {
@@ -18,9 +19,12 @@
   margin-inline: auto;
   padding: 3rem 2rem 3rem;
   background-image: url("../../../assets/OpenedBooks.png");
+  background-color: #f6ebdd;
   background-repeat: no-repeat;
   background-position: center top;
   background-size: 100% 100%;
+  border: 1px solid rgba(111, 61, 32, 0.18);
+  box-shadow: 0 10px 26px rgba(60, 38, 24, 0.14);
 }
 
 @media (max-width: 768px) {

@@ -22,6 +22,7 @@ function SearchBar({ setSearchResults }) {
   const [currentPage, setCurrentPage] = useState(1);
   const [totalPages, setTotalPages] = useState(0);
   const [pageInput, setPageInput] = useState("1");
+  const [history, setHistory] = useState([]);
 
   const handleInputChange = (e) => {
     setQuery(e.target.value);
@@ -33,11 +34,13 @@ function SearchBar({ setSearchResults }) {
     }
   };
 
-  const handleSearch = async (page = 1) => {
+  const handleSearch = async (page = 1, searchQuery = query) => {
+    const effectiveQuery = searchQuery.trim();
+
     try {
       const resultsPerPage = getResultsPerPage();
       // fetch search results from the API
-      const data = await searchBooks(query, page, resultsPerPage);
+      const data = await searchBooks(effectiveQuery, page, resultsPerPage);
       const formattedResults = formatBook(data.items);
       const pages = Math.ceil((data.totalItems || 0) / resultsPerPage);
 
@@ -45,6 +48,9 @@ function SearchBar({ setSearchResults }) {
       setCurrentPage(page);
       setTotalPages(pages);
       setPageInput(String(page));
+      setHistory((prevHistory) =>
+        Array.from(new Set([effectiveQuery, ...prevHistory])).slice(0, 5),
+      );
       setSearchResults(formattedResults);
 
       if (formattedResults.length === 0) {
@@ -56,6 +62,11 @@ function SearchBar({ setSearchResults }) {
       setSearchResults([]);
       setErrorMessage(error.message || "Search failed. Please try again.");
     }
+  };
+
+  const handleSearchSubmit = (e) => {
+    e.preventDefault();
+    handleSearch(1);
   };
 
   const handlePageInputChange = (e) => {
@@ -93,7 +104,7 @@ function SearchBar({ setSearchResults }) {
 
   return (
     <div className={styles.SearchBar}>
-      <div className={styles.searchControls}>
+      <form className={styles.searchControls} onSubmit={handleSearchSubmit}>
         <input
           type="text"
           placeholder="Type here to search..."
@@ -101,13 +112,26 @@ function SearchBar({ setSearchResults }) {
           onChange={handleInputChange}
           className={styles.searchInput}
         />
-        <button
-          type="button"
-          onClick={() => handleSearch(1)}
-          className={styles.searchButton}
-        >
+        <button type="submit" className={styles.searchButton}>
           Search
         </button>
+      </form>
+
+      {/* buttons for history items */}
+      <div>
+        {history.map((item, index) => (
+          <button
+            key={index}
+            type="button"
+            onClick={() => {
+              setQuery(item);
+              handleSearch(1, item);
+            }}
+            className={styles.historyButton}
+          >
+            {item}
+          </button>
+        ))}
       </div>
       {errorMessage ? (
         <small className={styles.errorMessage}>{errorMessage}</small>

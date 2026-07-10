@@ -1,12 +1,22 @@
 .searchContainer {
+  --paper: #f6ebdd;
+  --paper-deep: #ecd9bf;
+  --ink: #2f2119;
+  --ink-soft: #5c4335;
+  --accent: #8d4f2b;
+  --accent-strong: #6f3d20;
+
   min-height: 82vh;
   padding: 1.5rem 1rem 2rem;
   background-repeat: no-repeat;
   background-position: center top;
   background-size: contain;
-  background-color: #f6ebdd;
+  background-color: var(--paper);
+  color: var(--ink);
+  border: 1px solid rgba(111, 61, 32, 0.22);
   border-radius: 1.5rem;
   margin: 1rem;
+  box-shadow: 0 14px 36px rgba(60, 38, 24, 0.16);
   transition: background-image 220ms ease;
 }
 

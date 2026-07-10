@@ -4,28 +4,52 @@
   align-items: center;
   justify-content: center;
   margin-top: 20px;
+  color: #2f2119;
 }
 
 .searchInput {
   height: 1rem;
   padding: 0.5rem 1rem;
-  border: 1px solid #8d4f2b;
+  border: 1px solid #9a633e;
+  background: #fffaf3;
+  color: #2f2119;
   border-radius: 999px;
   font-size: 1rem;
+}
+
+.searchInput:focus-visible {
+  outline: 2px solid rgba(141, 79, 43, 0.28);
+  outline-offset: 1px;
 }
 
 .searchButton {
   height: 2rem;
   width: 4rem;
   text-align: center;
-  border: 1px solid #8d4f2b;
+  border: 1px solid #23474b;
   border-radius: 999px;
-  background: rgb(246, 235, 221);
-  color: black;
+  background: #2f5d62;
+  color: #f6efe5;
   font: inherit;
   font-size: 0.85rem;
-  font-weight: 500;
+  font-weight: 600;
   cursor: pointer;
+}
+
+.historyButton {
+  margin-top: 0.5rem;
+  border: 1px solid #8d4f2b;
+  border-radius: 999px;
+  background: #f3e4d0;
+  color: #6f3d20;
+  padding: 0.25rem 0.6rem;
+  cursor: pointer;
+}
+
+.historyButton:hover,
+.historyButton:focus-visible {
+  background: #e6cfb0;
+  outline: none;
 }
 
 .searchControls {
@@ -36,11 +60,12 @@
 }
 
 .errorMessage {
-  background-color: #f8d7da;
-  border: 1px solid #f5c6cb;
+  background-color: #f9ece4;
+  border: 1px solid #dba785;
   border-radius: 0.5rem;
-  margin: 0.5rem 0 0;
-  color: #c62828;
+  margin: 0.65rem 0 0;
+  padding: 0.35rem 0.65rem;
+  color: #8a2f23;
   font-size: 0.85rem;
 }
 
@@ -55,7 +80,7 @@
 
 .pageButton {
   border: 1px solid #8d4f2b;
-  background: #fff;
+  background: #fffaf3;
   color: #8d4f2b;
   border-radius: 999px;
   min-width: 2rem;
@@ -63,9 +88,16 @@
   cursor: pointer;
 }
 
+.pageButton:hover,
+.pageButton:focus-visible {
+  background: #efddc7;
+  outline: none;
+}
+
 .activePage {
   background: #8d4f2b;
-  color: #fff;
+  color: #fff8ef;
+  border-color: #8d4f2b;
 }
 
 .pageJump {
@@ -78,6 +110,8 @@
 .pageJump input {
   width: 3rem;
   border: 1px solid #8d4f2b;
+  background: #fffaf3;
+  color: #2f2119;
   border-radius: 999px;
   text-align: center;
   padding: 0.25rem 0.4rem;
@@ -86,8 +120,14 @@
 .pageJump button {
   border: 1px solid #8d4f2b;
   border-radius: 999px;
-  background: #fff;
-  color: #8d4f2b;
+  background: #f3e4d0;
+  color: #6f3d20;
   padding: 0.25rem 0.6rem;
   cursor: pointer;
+}
+
+.pageJump button:hover,
+.pageJump button:focus-visible {
+  background: #e6cfb0;
+  outline: none;
 }
