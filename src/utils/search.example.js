@@ -25,9 +25,8 @@ function loadApiKeyIntoProcessEnv() {
 // Placeholder script to demonstrate usage inside Vite app
 export async function runSample() {
   loadApiKeyIntoProcessEnv();
-  const books = await searchBooks("JavaScript");
-  return books;
-  // return formatBook(books);
+  const { items } = await searchBooks("JavaScript");
+  return formatBook(items);
 }
 
 console.log("Sample search results:", await runSample());

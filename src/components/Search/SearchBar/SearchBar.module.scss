@@ -18,3 +18,51 @@
   color: #c62828;
   font-size: 0.85rem;
 }
+
+.pagination {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  align-items: center;
+  gap: 0.4rem;
+  margin-top: 0.75rem;
+}
+
+.pageButton {
+  border: 1px solid #8d4f2b;
+  background: #fff;
+  color: #8d4f2b;
+  border-radius: 999px;
+  min-width: 2rem;
+  padding: 0.25rem 0.6rem;
+  cursor: pointer;
+}
+
+.activePage {
+  background: #8d4f2b;
+  color: #fff;
+}
+
+.pageJump {
+  display: flex;
+  align-items: center;
+  gap: 0.35rem;
+  margin-left: 0.5rem;
+}
+
+.pageJump input {
+  width: 3rem;
+  border: 1px solid #8d4f2b;
+  border-radius: 999px;
+  text-align: center;
+  padding: 0.25rem 0.4rem;
+}
+
+.pageJump button {
+  border: 1px solid #8d4f2b;
+  border-radius: 999px;
+  background: #fff;
+  color: #8d4f2b;
+  padding: 0.25rem 0.6rem;
+  cursor: pointer;
+}

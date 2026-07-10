@@ -65,13 +65,23 @@ export function getBooksApiKey() {
   return sanitiseApiKey(apiKey);
 }
 
-export function searchBooks(query) {
+export function searchBooks(query, page = 1, maxResults = 8) {
   if (!query) throw new Error("Query is required for searching books");
+  if (!Number.isInteger(page) || page < 1) {
+    throw new Error("Page must be a positive integer");
+  }
+  if (!Number.isInteger(maxResults) || maxResults < 1) {
+    throw new Error("maxResults must be a positive integer");
+  }
+
   const apiKey = getBooksApiKey();
   if (!apiKey) throw new Error("BOOKS_API_KEY is missing or empty in .env");
-  // hardcoded maxResults=8 to limit the number of results
-  const url = `https://www.googleapis.com/books/v1/volumes?q=${encodeURIComponent(query)}&key=${apiKey}&maxResults=8`;
-  return fetchGoogleBooksJson(url, "books").then((data) => data.items || []);
+  const startIndex = (page - 1) * maxResults;
+  const url = `https://www.googleapis.com/books/v1/volumes?q=${encodeURIComponent(query)}&key=${apiKey}&maxResults=${maxResults}&startIndex=${startIndex}`;
+  return fetchGoogleBooksJson(url, "books").then((data) => ({
+    items: data.items || [],
+    totalItems: data.totalItems || 0,
+  }));
 }
 
 export function formatBook(bookdata) {

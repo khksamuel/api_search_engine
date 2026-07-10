@@ -103,22 +103,30 @@ describe("Google Books helpers", () => {
     );
   });
 
-  test("searchBooks returns API items array", async () => {
+  test("searchBooks throws if page is invalid", () => {
+    process.env.BOOKS_API_KEY = "test-key";
+    expect(() => searchBooks("JavaScript", 0)).toThrow(
+      /Page must be a positive integer/,
+    );
+  });
+
+  test("searchBooks returns API items and totalItems", async () => {
     process.env.BOOKS_API_KEY = "test-key";
     const items = [createBook(), createBook({ title: "Eloquent JavaScript" })];
 
     global.fetch = jest.fn(async (url) => {
       expect(url).toMatch(/q=JavaScript/);
       expect(url).toMatch(/key=test-key/);
+      expect(url).toMatch(/maxResults=8/);
+      expect(url).toMatch(/startIndex=0/);
 
       return {
-        json: async () => ({ items }),
+        json: async () => ({ items, totalItems: 23 }),
       };
     });
 
     const result = await searchBooks("JavaScript");
-    expect(result).toHaveLength(2);
-    expect(result).toEqual(items);
+    expect(result).toEqual({ items, totalItems: 23 });
   });
 
   test("searchBooks encodes query text", async () => {
@@ -127,11 +135,24 @@ describe("Google Books helpers", () => {
     global.fetch = jest.fn(async (url) => {
       expect(url).toMatch(/q=clean%20code/);
       return {
-        json: async () => ({ items: [createBook()] }),
+        json: async () => ({ items: [createBook()], totalItems: 1 }),
       };
     });
 
     await searchBooks("clean code");
+  });
+
+  test("searchBooks uses startIndex for requested page", async () => {
+    process.env.BOOKS_API_KEY = "test-key";
+
+    global.fetch = jest.fn(async (url) => {
+      expect(url).toMatch(/startIndex=16/);
+      return {
+        json: async () => ({ items: [createBook()], totalItems: 30 }),
+      };
+    });
+
+    await searchBooks("clean code", 3, 8);
   });
 
   test("searchBooks returns empty array when API has no items", async () => {
@@ -142,7 +163,7 @@ describe("Google Books helpers", () => {
     }));
 
     const result = await searchBooks("missing");
-    expect(result).toEqual([]);
+    expect(result).toEqual({ items: [], totalItems: 0 });
   });
 
   test("searchBooks throws Rate Limit error when API returns 429 with text body", async () => {
@@ -241,11 +262,11 @@ describe("Google Books helpers", () => {
   test("column name flow from brief works with async search + formatting", async () => {
     process.env.BOOKS_API_KEY = "test-key";
     global.fetch = jest.fn(async () => ({
-      json: async () => ({ items: [createBook()] }),
+      json: async () => ({ items: [createBook()], totalItems: 1 }),
     }));
 
     const booksdata = await searchBooks("JavaScript");
-    const formattedBooks = formatBook(booksdata);
+    const formattedBooks = formatBook(booksdata.items);
     const columns = formattedBooks.length ? Object.keys(formattedBooks[0]) : [];
 
     expect(columns).toEqual(EXPECTED_COLUMNS);
