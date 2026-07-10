@@ -47,10 +47,15 @@ async function fetchGoogleBooksJson(url, errorContext) {
 
     return await response.json().catch(() => ({}));
   } catch (error) {
-    if (GOOGLE_BOOKS_ERROR_PREFIX.test(error.message)) {
+    const errorMessage = error instanceof Error ? error.message : String(error);
+
+    if (GOOGLE_BOOKS_ERROR_PREFIX.test(errorMessage)) {
       throw error;
     }
-    throw new Error(`Error fetching ${errorContext}: ${error.message}`);
+
+    throw new Error(`Error fetching ${errorContext}: ${errorMessage}`, {
+      cause: error,
+    });
   }
 }
 
@@ -66,7 +71,10 @@ export function getBooksApiKey() {
 }
 
 export function searchBooks(query, page = 1, maxResults = 8) {
-  if (!query) throw new Error("Query is required for searching books. Try using a different query.");
+  if (!query)
+    throw new Error(
+      "Query is required for searching books. Try using a different query.",
+    );
   if (!Number.isInteger(page) || page < 1) {
     throw new Error("Page must be a positive integer");
   }
