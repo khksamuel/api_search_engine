@@ -4,27 +4,42 @@ import { searchBooks, formatBook } from "../../../utils/search.js";
 
 function SearchBar({ setSearchResults }) {
   const [query, setQuery] = useState("");
+  const [errorMessage, setErrorMessage] = useState("");
 
   const handleInputChange = (e) => {
     setQuery(e.target.value);
+    if (errorMessage) {
+      setErrorMessage("");
+    }
   };
 
   const handleSearch = async () => {
-    // fetch search results from the API
-    const results = await searchBooks(query);
-    const formattedResults = formatBook(results);
-    setSearchResults(formattedResults);
+    try {
+      // fetch search results from the API
+      const results = await searchBooks(query);
+      const formattedResults = formatBook(results);
+      setErrorMessage("");
+      setSearchResults(formattedResults);
+    } catch (error) {
+      setSearchResults([]);
+      setErrorMessage(error.message || "Search failed. Please try again.");
+    }
   };
 
   return (
     <div className={styles.SearchBar}>
-      <input
-        type="text"
-        placeholder="Type here to search..."
-        value={query}
-        onChange={handleInputChange}
-      />
-      <button onClick={handleSearch}>Search</button>
+      <div className={styles.searchControls}>
+        <input
+          type="text"
+          placeholder="Type here to search..."
+          value={query}
+          onChange={handleInputChange}
+        />
+          <button onClick={handleSearch}>Search</button>
+      </div>
+      {errorMessage ? (
+        <small className={styles.errorMessage}>{errorMessage}</small>
+      ) : null}
     </div>
   );
 }
