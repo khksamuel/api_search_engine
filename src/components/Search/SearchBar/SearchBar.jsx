@@ -2,7 +2,19 @@ import styles from "./SearchBar.module.scss";
 import { useState } from "react";
 import { searchBooks, formatBook } from "../../../utils/search.js";
 
-const RESULTS_PER_PAGE = 8;
+const DESKTOP_RESULTS_PER_PAGE = 8;
+const MOBILE_RESULTS_PER_PAGE = 4;
+
+function getResultsPerPage() {
+  if (
+    typeof window !== "undefined" &&
+    window.matchMedia("(max-width: 768px)").matches
+  ) {
+    return MOBILE_RESULTS_PER_PAGE;
+  }
+
+  return DESKTOP_RESULTS_PER_PAGE;
+}
 
 function SearchBar({ setSearchResults }) {
   const [query, setQuery] = useState("");
@@ -23,10 +35,11 @@ function SearchBar({ setSearchResults }) {
 
   const handleSearch = async (page = 1) => {
     try {
+      const resultsPerPage = getResultsPerPage();
       // fetch search results from the API
-      const data = await searchBooks(query, page, RESULTS_PER_PAGE);
+      const data = await searchBooks(query, page, resultsPerPage);
       const formattedResults = formatBook(data.items);
-      const pages = Math.ceil((data.totalItems || 0) / RESULTS_PER_PAGE);
+      const pages = Math.ceil((data.totalItems || 0) / resultsPerPage);
 
       setErrorMessage("");
       setCurrentPage(page);
@@ -88,7 +101,11 @@ function SearchBar({ setSearchResults }) {
           onChange={handleInputChange}
           className={styles.searchInput}
         />
-        <button type="button" onClick={() => handleSearch(1)} className={styles.searchButton}>
+        <button
+          type="button"
+          onClick={() => handleSearch(1)}
+          className={styles.searchButton}
+        >
           Search
         </button>
       </div>

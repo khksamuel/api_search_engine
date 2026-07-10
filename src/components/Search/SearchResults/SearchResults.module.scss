@@ -1,9 +1,11 @@
 .searchResults {
   margin-top: 1rem;
-  padding-top: 10px;
-  display: flex;
-  flex-wrap: wrap;
-  justify-content: center;
+  width: 100%;
+  box-sizing: border-box;
+  display: grid;
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+  justify-items: center;
+  align-items: start;
   column-gap: 40px;
   row-gap: 20px;
   padding: 20px;
@@ -11,15 +13,28 @@
 
 .hasResults {
   min-height: 60vh;
+  width: min(1200px, 100%);
+  box-sizing: border-box;
+  margin-inline: auto;
+  padding: 3rem 2rem 3rem;
   background-image: url("../../../assets/OpenedBooks.png");
   background-repeat: no-repeat;
   background-position: center top;
-  background-size: min(1200px, 98%) auto;
+  background-size: 100% 100%;
 }
 
 @media (max-width: 768px) {
+  .searchResults {
+    grid-template-columns: repeat(4, minmax(0, 1fr));
+    column-gap: 14px;
+    row-gap: 16px;
+    padding: 12px;
+  }
+
   .hasResults {
-    background-size: 170% auto;
-    background-position: center 0.5rem;
+    min-height: 70vh;
+    padding: 4.25rem 0.75rem 2rem;
+    background-position: center top;
+    background-size: 100% 100%;
   }
 }
