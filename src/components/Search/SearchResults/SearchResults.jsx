@@ -1,12 +1,18 @@
 import Card from "../Card/Card.jsx";
 import styles from "./SearchResults.module.scss";
 
-function SearchResults({ searchResults }) {
+function SearchResults({ searchResults, isOpening }) {
   const hasResults = searchResults.length > 0;
+
+  if (!hasResults) {
+    return null;
+  }
 
   return (
     <div
-      className={`${styles.searchResults} ${hasResults ? styles.hasResults : ""}`}
+      className={`${styles.searchResults} ${styles.hasResults} ${
+        isOpening ? styles.opening : ""
+      }`}
     >
       {searchResults.map((result, index) => (
         <Card

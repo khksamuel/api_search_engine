@@ -1,28 +1,32 @@
 .titleContainer {
-  margin: 1rem 1rem 0.5rem;
-  padding: 1rem 1.25rem;
+  margin: 0.65rem 1rem 0.35rem;
+  padding: 0.7rem 1rem;
   border-radius: 1.1rem;
   background: linear-gradient(
     160deg,
-    rgba(255, 248, 238, 0.94),
-    rgba(242, 223, 197, 0.94)
+    rgba(90, 52, 32, 0.96),
+    rgba(125, 73, 43, 0.95) 50%,
+    rgba(168, 110, 72, 0.93)
   );
-  border: 1px solid rgba(111, 61, 32, 0.24);
-  box-shadow: 0 10px 24px rgba(60, 38, 24, 0.14);
+  border: 1px solid rgba(73, 42, 26, 0.42);
+  box-shadow:
+    0 10px 24px rgba(60, 38, 24, 0.2),
+    inset 0 1px 0 rgba(248, 224, 196, 0.28);
 }
 
 .titleContainer h1 {
   margin: 0;
-  color: #3c281b;
-  font-size: clamp(1.6rem, 2.7vw, 2.45rem);
+  color: #fff4e6;
+  font-size: clamp(1.25rem, 2.1vw, 1.9rem);
+  font-weight: 600;
   letter-spacing: -0.02em;
-  text-shadow: 0 1px 0 rgba(255, 252, 246, 0.7);
+  text-shadow: 0 2px 0 rgba(48, 28, 18, 0.35);
 }
 
 @media (max-width: 768px) {
   .titleContainer {
-    margin: 0.75rem 0.75rem 0.35rem;
-    padding: 0.85rem 0.9rem;
+    margin: 0.5rem 0.75rem 0.25rem;
+    padding: 0.55rem 0.8rem;
     border-radius: 0.9rem;
   }
 }

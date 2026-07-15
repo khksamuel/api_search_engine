@@ -32,6 +32,8 @@
 
 body {
   margin: 0;
+  height: 100dvh;
+  overflow: hidden;
   background:
     radial-gradient(circle at 18% 10%, #fff8ee 0%, #f4e2cc 38%, transparent 70%),
     radial-gradient(circle at 84% 16%, #f6ead6 0%, #ecd4b6 42%, transparent 72%),
@@ -46,9 +48,10 @@ body {
   border-inline: 1px solid rgba(111, 61, 32, 0.18);
   background: rgba(252, 245, 235, 0.82);
   backdrop-filter: blur(2px);
-  min-height: 100svh;
+  height: 100dvh;
   display: flex;
   flex-direction: column;
+  overflow: hidden;
   box-sizing: border-box;
 }
 

@@ -3,13 +3,22 @@
   flex-direction: column;
   align-items: center;
   justify-content: center;
-  margin-top: 20px;
+  gap: 0.35rem;
+  margin-top: 0.2rem;
+  padding: 0.5rem 0.7rem;
+  border-radius: 1rem;
+  background: rgba(251, 242, 229, 0.82);
+  border: 1px solid rgba(111, 61, 32, 0.2);
+  box-shadow: 0 7px 16px rgba(52, 35, 23, 0.11);
+  width: min(720px, 100%);
+  margin-inline: auto;
   color: #2f2119;
 }
 
 .searchInput {
-  height: 1rem;
-  padding: 0.5rem 1rem;
+  height: 0.95rem;
+  min-width: min(520px, 66vw);
+  padding: 0.45rem 0.9rem;
   border: 1px solid #9a633e;
   background: #fffaf3;
   color: #2f2119;
@@ -23,26 +32,34 @@
 }
 
 .searchButton {
-  height: 2rem;
-  width: 4rem;
+  height: 1.9rem;
+  min-width: 4.7rem;
+  padding-inline: 0.7rem;
   text-align: center;
   border: 1px solid #23474b;
   border-radius: 999px;
-  background: #2f5d62;
+  background: linear-gradient(180deg, #35696f, #2b5559);
   color: #f6efe5;
   font: inherit;
-  font-size: 0.85rem;
+  font-size: 0.82rem;
   font-weight: 600;
   cursor: pointer;
 }
 
+.searchButton:hover,
+.searchButton:focus-visible {
+  filter: brightness(1.06);
+  outline: none;
+}
+
 .historyButton {
-  margin-top: 0.5rem;
+  margin-top: 0.2rem;
   border: 1px solid #8d4f2b;
   border-radius: 999px;
   background: #f3e4d0;
   color: #6f3d20;
-  padding: 0.25rem 0.6rem;
+  padding: 0.16rem 0.5rem;
+  font-size: 0.82rem;
   cursor: pointer;
 }
 
@@ -57,16 +74,17 @@
   align-items: center;
   justify-content: center;
   gap: 0.75rem;
+  width: 100%;
 }
 
 .errorMessage {
   background-color: #f9ece4;
   border: 1px solid #dba785;
   border-radius: 0.5rem;
-  margin: 0.65rem 0 0;
-  padding: 0.35rem 0.65rem;
+  margin: 0.2rem 0 0;
+  padding: 0.2rem 0.5rem;
   color: #8a2f23;
-  font-size: 0.85rem;
+  font-size: 0.78rem;
 }
 
 .pagination {
@@ -74,8 +92,8 @@
   flex-wrap: wrap;
   justify-content: center;
   align-items: center;
-  gap: 0.4rem;
-  margin-top: 0.75rem;
+  gap: 0.28rem;
+  margin-top: 0.2rem;
 }
 
 .pageButton {
@@ -83,8 +101,9 @@
   background: #fffaf3;
   color: #8d4f2b;
   border-radius: 999px;
-  min-width: 2rem;
-  padding: 0.25rem 0.6rem;
+  min-width: 1.75rem;
+  padding: 0.18rem 0.48rem;
+  font-size: 0.82rem;
   cursor: pointer;
 }
 
@@ -103,18 +122,19 @@
 .pageJump {
   display: flex;
   align-items: center;
-  gap: 0.35rem;
-  margin-left: 0.5rem;
+  gap: 0.28rem;
+  margin-left: 0.35rem;
 }
 
 .pageJump input {
-  width: 3rem;
+  width: 2.6rem;
   border: 1px solid #8d4f2b;
   background: #fffaf3;
   color: #2f2119;
   border-radius: 999px;
   text-align: center;
-  padding: 0.25rem 0.4rem;
+  padding: 0.15rem 0.3rem;
+  font-size: 0.82rem;
 }
 
 .pageJump button {
@@ -122,7 +142,8 @@
   border-radius: 999px;
   background: #f3e4d0;
   color: #6f3d20;
-  padding: 0.25rem 0.6rem;
+  padding: 0.18rem 0.5rem;
+  font-size: 0.82rem;
   cursor: pointer;
 }
 
@@ -130,4 +151,22 @@
 .pageJump button:focus-visible {
   background: #e6cfb0;
   outline: none;
+}
+
+@media (max-width: 768px) {
+  .SearchBar {
+    width: 100%;
+    padding: 0.45rem 0.5rem;
+  }
+
+  .searchControls {
+    width: 100%;
+    flex-wrap: wrap;
+    gap: 0.5rem;
+  }
+
+  .searchInput {
+    width: 100%;
+    min-width: 0;
+  }
 }
