@@ -9,13 +9,13 @@
   padding: 0.65rem;
   background-image: radial-gradient(
     circle at 50% 14%,
-    rgba(255, 246, 232, 0.56),
+    rgba(255, 246, 232, 0.22),
     transparent 64%
   );
   background-repeat: no-repeat;
   background-position: center top;
   background-size: 100% 100%;
-  background-color: var(--paper);
+  background-color: rgba(247, 239, 227, 0.42);
   color: var(--ink);
   border: 1px solid rgba(111, 61, 32, 0.22);
   border-radius: 1.5rem;

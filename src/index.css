@@ -35,9 +35,14 @@ body {
   height: 100dvh;
   overflow: hidden;
   background:
+    linear-gradient(rgba(238, 223, 202, 0.11), rgba(230, 209, 182, 0.09)),
     radial-gradient(circle at 18% 10%, #fff8ee 0%, #f4e2cc 38%, transparent 70%),
     radial-gradient(circle at 84% 16%, #f6ead6 0%, #ecd4b6 42%, transparent 72%),
-    #ead0b0;
+    url("/bookshelf.jpg");
+  background-size: 100% 100%, 100% 100%, 100% 100%, cover;
+  background-position: center, center, center, 50% 40%;
+  background-repeat: no-repeat, no-repeat, no-repeat, no-repeat;
+  background-attachment: scroll, scroll, scroll, fixed;
 }
 
 #root {
@@ -46,8 +51,8 @@ body {
   margin: 0 auto;
   text-align: center;
   border-inline: 1px solid rgba(111, 61, 32, 0.18);
-  background: rgba(252, 245, 235, 0.82);
-  backdrop-filter: blur(2px);
+  background: rgba(252, 245, 235, 0.26);
+  backdrop-filter: blur(1px);
   height: 100dvh;
   display: flex;
   flex-direction: column;
