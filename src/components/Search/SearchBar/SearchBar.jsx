@@ -16,7 +16,7 @@ function getResultsPerPage() {
   return DESKTOP_RESULTS_PER_PAGE;
 }
 
-function SearchBar({ setSearchResults }) {
+function SearchBar({ setSearchResults, cacheInstance }) {
   const [query, setQuery] = useState("");
   const [errorMessage, setErrorMessage] = useState("");
   const [currentPage, setCurrentPage] = useState(1);
@@ -36,6 +36,25 @@ function SearchBar({ setSearchResults }) {
 
   const handleSearch = async (page = 1, searchQuery = query) => {
     const effectiveQuery = searchQuery.trim();
+    const cachedEntry = cacheInstance?.find(effectiveQuery, page);
+
+    // check if the search results for the query and page are already cached
+    // if so, use the cached results instead of making a new API request
+    if (cachedEntry) {
+      const cachedResults = Array.isArray(cachedEntry)
+        ? cachedEntry
+        : cachedEntry.results || [];
+      const cachedTotalPages = Array.isArray(cachedEntry)
+        ? totalPages
+        : cachedEntry.totalPages ||
+          Math.ceil((cachedEntry.totalItems || 0) / getResultsPerPage());
+      setSearchResults(cachedResults);
+      setErrorMessage("");
+      setCurrentPage(page);
+      setTotalPages(cachedTotalPages);
+      setPageInput(String(page));
+      return;
+    }
 
     try {
       const resultsPerPage = getResultsPerPage();
@@ -51,6 +70,11 @@ function SearchBar({ setSearchResults }) {
       setHistory((prevHistory) =>
         Array.from(new Set([effectiveQuery, ...prevHistory])).slice(0, 5),
       );
+      cacheInstance?.save(effectiveQuery, page, {
+        results: formattedResults,
+        totalItems: data.totalItems || 0,
+        totalPages: pages,
+      });
       setSearchResults(formattedResults);
 
       if (formattedResults.length === 0) {
